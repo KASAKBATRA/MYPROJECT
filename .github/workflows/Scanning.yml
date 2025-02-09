@@ -15,13 +15,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Install Checkov
+      - name: Install Checkov (Terraform & Docker Scanning)
         run: pip install checkov
 
-      - name: Run Checkov
-        run: checkov -d .
+      - name: Run Checkov on Terraform Files
+        run: checkov -d . --framework terraform
 
-      - name: Install tfsec
+      - name: Run Checkov on Dockerfile
+        run: checkov -d . --framework dockerfile
+
+      - name: Install tfsec (Terraform Security Scanner)
         run: |
           curl -L "$(curl -s https://api.github.com/repos/aquasecurity/tfsec/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)" -o tfsec
           chmod +x tfsec
@@ -30,14 +33,14 @@ jobs:
       - name: Run tfsec
         run: tfsec .
 
-      - name: Install TFLint
+      - name: Install TFLint (Terraform Linter)
         run: |
           curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
       - name: Run TFLint
         run: tflint --init && tflint
 
-      - name: Install Terrascan
+      - name: Install Terrascan (IaC Security Scanner)
         run: |
           curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '"' -f 4)" -o terrascan
           chmod +x terrascan
@@ -45,3 +48,4 @@ jobs:
 
       - name: Run Terrascan
         run: terrascan scan -d .
+
