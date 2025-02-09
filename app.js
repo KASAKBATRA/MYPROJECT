@@ -25,6 +25,10 @@ const resetGame = () => {
     msgContainer.classList.add("hide");
 };
 
+resetBtn.addEventListener("click", resetGame);
+NewGameBtn.addEventListener("click", resetGame);
+
+
 // boxes.forEach((box) => {
 //     box.addEventListener("click", () =>{
 
@@ -94,17 +98,19 @@ const checkWinner = () => {
     for(let pattern of winPatterns){
         let pos1Val = boxes[pattern[0]].innerText;
         let pos2Val = boxes[pattern[1]].innerText;
-        let pos3Val = boxes[pattern[1]].innerText;
+        let pos3Val = boxes[pattern[2]].innerText; // Yeh correct hai
 
-        if (pos1Val != "" && pos2Val != "" && pos3Val != ""){
+        if (pos1Val !== "" && pos2Val !== "" && pos3Val !== "") {
             if(pos1Val === pos2Val && pos2Val === pos3Val){
-                console.log("winner!", pos1val);
-                showWinner();
+                console.log("Winner!", pos1Val);
+                showWinner(pos1Val);
+                return true; // Game khatam hone ke baad aur moves allow mat karein
             }
         }
-        
     }
+    return false;
 };
+
 
 const NewGame = () => {
     turnO = true;
